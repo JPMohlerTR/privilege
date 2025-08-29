@@ -1,4 +1,4 @@
-1) set up .csv file with rows: Control (prefix of .txt files), Attorney (Attorney names in document), Answer (optional, if you have Answer Key for document set), Group (if you have Group Identifiers for document set)
+1) set up .csv file with columns: Control (prefix of .txt files), Attorney (Attorney names in document), Answer (optional, if you have Answer Key for document set), Group (if you have Group Identifiers for document set)
 
 2) call python3 priv2.py csv_fil_name.csv folder_with_docs/ priv-full-NAME_OF_RUN
    NOTE: the name of the run MUST start "priv-full", or past runs won't be deleted and process may load the wrong .txt files (TO DO: Fix this bug)
