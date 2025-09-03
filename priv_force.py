@@ -86,7 +86,7 @@ def clean_attorney_value(attorney_value):
 def create_privilege_prompt(document_content, attorney_names=None):
     """Create the privilege determination prompt (kept as you wrote it)."""
     base_prompt = (
-        "Is the following document attorney-client privileged? Defer toward thinking something is privileged if you are not sure, but you should have a good reason to call it privileged. Here is a list of reasons a document might be attorney-client privileged: "
+        "The following document is attorney-client privileged. Describe why it is attorney client privileged.  Here is a list of reasons a document might be attorney-client privileged: "
         "1. it includes legal advice "
         "2. it includes a request for legal advice, which could include a request to draft, review, look at or comment upon specific documents or communications even if the document/communications being referenced does not appear to be a legal document "
         "3. it includes a request for information for the purpose of legal advice "
@@ -107,15 +107,13 @@ def create_privilege_prompt(document_content, attorney_names=None):
         "18. It relates to the process by which Xcel received claims from individuals and businesses harmed by the Smokehouse Creek Fire and paid those claims "
         "19. It relates to mediation with any individuals or businesses harmed by the Smokehouse Creek Fire, including any discussion of settlement amounts "
         "20. It contains legal analysis. "
-        "-- Remember you should defer toward identifying the document as privileged as long as you have a good reason to think so. Keep a close eye on documents that refer to a law firm, or outside counsel/attorney, and especially if that law firm is Cravath, Swaine and Moore (these are often privileged). \n\n"
+        "-- Remember if you can't find any other reason, your justification could be simply a law firm, or outside counsel/attorney, and especially if that law firm is Cravath, Swaine and Moore (these are often privileged) is mentioned. \n\n"
     )
     if attorney_names:
         base_prompt += f"Here are some names of attorneys (or possibly just the attorneys' website domain) who are involved in the case and mentioned in the document: {attorney_names}\n\n"
 
     base_prompt += (
-        "If you decide privileged, respond with the character: Y, followed by a comma, followed by a 2-3 sentence explanation for why the document is privileged. \n"
-        "If you decide not privileged, respond with the character: N\n\n"
-        "only respond with either (1) Y, followed by a comma, followed by a 2-3 sentence explanation for why the document is privileged, or (2) the single character: N. Nothing else.\n\n"
+        "Respond with a 2-3 sentence explanation for why the document is privileged. \n"
         f"Document content:\n{document_content}"
     )
     return base_prompt
@@ -185,10 +183,7 @@ def read_single_result_file(control_value: str, output_dir: Path) -> str:
         upper = raw.upper()
 
         # Primary expected LLM outputs
-        if upper.startswith('Y'):
-            return 'Privileged' + raw[1:]
-        if upper.startswith('N'):
-            return 'Not Privileged'
+        return 'Privileged: ' + raw
 
         # Our explicit markers (new + backward compatible)
         if upper in {'TOO_SHORT', 'DOCUMENT_TOO_SHORT'}:
